@@ -3,8 +3,9 @@ import { GEMINI_KEY } from "./constants";
 
 const genAI = new GoogleGenerativeAI(GEMINI_KEY);
 
-// OLD: "gemini-1.5-flash" (Expired)
-// NEW: "gemini-2.5-flash" (Latest & Fastest 2025 Model)
-const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+// "gemini-1.5-flash" -> Retired (404)
+// "gemini-2.5-flash" -> Busy (503)
+// SOLUTION: "gemini-2.5-flash-lite" (Fast & Stable)
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
 export default model;
