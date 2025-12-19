@@ -15,34 +15,22 @@ const Header = () => {
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
 
   const handleSignOut = () => {
-    signOut(auth)
-      .then(() => {})
-      .catch((error) => {
-        navigate("/error");
-      });
+    signOut(auth).catch(() => navigate("/error"));
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
-        dispatch(
-          addUser({
-            uid: uid,
-            email: email,
-            displayName: displayName,
-            photoURL: photoURL,
-          })
-        );
+        dispatch(addUser({ uid, email, displayName, photoURL }));
         navigate("/browse");
       } else {
         dispatch(removeUser());
         navigate("/");
       }
     });
-
     return () => unsubscribe();
-  }, [dispatch, navigate]);
+  }, []);
 
   const handleGptSearchClick = () => {
     dispatch(toggleGptSearchView());
@@ -54,12 +42,13 @@ const Header = () => {
 
   return (
     <div className="absolute w-full px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between items-center">
-      <img className="w-44 mx-auto md:mx-0 cursor-pointer" src={LOGO} alt="logo" />
+      <img className="w-44 mx-auto md:mx-0" src={LOGO} alt="logo" />
+      
       {user && (
-        <div className="flex p-2 justify-between items-center gap-4">
+        <div className="flex p-2 items-center gap-2">
           {showGptSearch && (
             <select
-              className="p-2 bg-gray-900 text-white rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600 outline-none"
+              className="p-2 bg-gray-900 text-white rounded-lg"
               onChange={handleLanguageChange}
             >
               {SUPPORTED_LANGUAGES.map((lang) => (
@@ -69,22 +58,23 @@ const Header = () => {
               ))}
             </select>
           )}
+          
           <button
-            className="py-2 px-4 bg-purple-800 text-white rounded-lg hover:bg-purple-900 transition-all duration-300 font-semibold shadow-lg"
+            className="py-2 px-4 bg-purple-800 text-white rounded-lg text-sm md:text-base"
             onClick={handleGptSearchClick}
           >
-            {showGptSearch ? "Home" : "GPT Search"}
+            {showGptSearch ? "Homepage" : "GPT Search"}
           </button>
-          <div className="flex items-center gap-2 group cursor-pointer" onClick={handleSignOut}>
-             <img
-                className="hidden md:block w-10 h-10 rounded-md border-2 border-transparent group-hover:border-red-600 transition-all"
-                alt="usericon"
-                src={user?.photoURL}
-             />
-             <button className="font-bold text-white group-hover:text-red-500 transition-colors">
-                Sign Out
-             </button>
-          </div>
+          
+          <img
+            className="hidden md:block w-10 h-10 rounded-full"
+            alt="usericon"
+            src={user?.photoURL}
+          />
+          
+          <button onClick={handleSignOut} className="font-bold text-white text-sm md:text-base">
+            (Sign Out)
+          </button>
         </div>
       )}
     </div>

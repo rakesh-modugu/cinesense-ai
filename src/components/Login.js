@@ -26,6 +26,7 @@ const Login = () => {
     if (message) return;
 
     if (!isSignInForm) {
+      // Sign Up Logic
       createUserWithEmailAndPassword(
         auth,
         email.current.value,
@@ -56,6 +57,7 @@ const Login = () => {
           setErrorMessage(error.code + "-" + error.message);
         });
     } else {
+      // Sign In Logic
       signInWithEmailAndPassword(
         auth,
         email.current.value,
@@ -73,53 +75,62 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="relative min-h-screen">
       <Header />
+      
+      {/* Background Image */}
       <div className="absolute top-0 left-0 w-full h-full -z-10">
         <img className="h-full w-full object-cover" src={BG_URL} alt="background" />
         <div className="absolute top-0 left-0 w-full h-full bg-black/50"></div>
       </div>
-      <form
-        onSubmit={(e) => e.preventDefault()}
-        className="w-[90%] md:w-3/12 absolute p-12 bg-black/80 my-36 mx-auto right-0 left-0 text-white rounded-lg shadow-2xl backdrop-blur-sm"
-      >
-        <h1 className="font-bold text-3xl py-4 mb-4">
-          {isSignInForm ? "Sign In" : "Sign Up"}
-        </h1>
 
-        {!isSignInForm && (
-          <input
-            ref={name}
-            type="text"
-            placeholder="Full Name"
-            className="p-4 my-2 w-full bg-[#333] rounded-lg border border-transparent focus:border-red-600 focus:outline-none transition-all"
-          />
-        )}
-        <input
-          ref={email}
-          type="text"
-          placeholder="Email Address"
-          className="p-4 my-2 w-full bg-[#333] rounded-lg border border-transparent focus:border-red-600 focus:outline-none transition-all"
-        />
-        <input
-          ref={password}
-          type="password"
-          placeholder="Password"
-          className="p-4 my-2 w-full bg-[#333] rounded-lg border border-transparent focus:border-red-600 focus:outline-none transition-all"
-        />
-        <p className="text-red-500 font-bold text-lg py-2">{errorMessage}</p>
-        <button
-          className="p-4 my-6 bg-red-700 w-full rounded-lg font-bold hover:bg-red-800 transition-colors"
-          onClick={handleButtonClick}
+      {/* Form Container - Using Flexbox for Center Alignment */}
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="w-full max-w-md p-8 bg-black/80 text-white rounded-lg shadow-2xl"
         >
-          {isSignInForm ? "Sign In" : "Sign Up"}
-        </button>
-        <p className="py-4 cursor-pointer text-gray-400 hover:text-white transition-colors" onClick={toggleSignInForm}>
-          {isSignInForm
-            ? "New to Netflix? Sign Up Now"
-            : "Already registered? Sign In Now"}
-        </p>
-      </form>
+          <h1 className="font-bold text-3xl mb-6">
+            {isSignInForm ? "Sign In" : "Sign Up"}
+          </h1>
+
+          {!isSignInForm && (
+            <input
+              ref={name}
+              type="text"
+              placeholder="Full Name"
+              className="p-3 my-2 w-full bg-[#333] rounded border border-transparent focus:border-red-500 outline-none"
+            />
+          )}
+          <input
+            ref={email}
+            type="text"
+            placeholder="Email Address"
+            className="p-3 my-2 w-full bg-[#333] rounded border border-transparent focus:border-red-500 outline-none"
+          />
+          <input
+            ref={password}
+            type="password"
+            placeholder="Password"
+            className="p-3 my-2 w-full bg-[#333] rounded border border-transparent focus:border-red-500 outline-none"
+          />
+          
+          <p className="text-red-500 font-bold py-2">{errorMessage}</p>
+          
+          <button
+            className="p-3 my-4 bg-red-700 w-full rounded font-bold hover:bg-red-800"
+            onClick={handleButtonClick}
+          >
+            {isSignInForm ? "Sign In" : "Sign Up"}
+          </button>
+          
+          <p className="py-4 cursor-pointer hover:underline" onClick={toggleSignInForm}>
+            {isSignInForm
+              ? "New to Netflix? Sign Up Now"
+              : "Already registered? Sign In Now"}
+          </p>
+        </form>
+      </div>
     </div>
   );
 };
