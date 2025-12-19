@@ -22,28 +22,24 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const { uid, email, displayName, photoURL } = user;
-        dispatch(
-          addUser({
-            uid: uid,
-            email: email,
-            displayName: displayName,
-            photoURL: photoURL,
-          })
-        );
-        navigate("/browse");
-      } else {
-        dispatch(removeUser());
-        navigate("/");
-      }
-    });
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User signed in logic...
+      const { uid, email, displayName, photoURL } = user;
+      dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
+      navigate("/browse");
+    } else {
+      // User signed out logic...
+      dispatch(removeUser());
+      navigate("/");
+    }
+  });
 
-    // Unsiubscribe when component unmounts
-    return () => unsubscribe();
-  }, []);
-
+  // Unsubscribe when component unmounts
+  return () => unsubscribe();
+  
+  // *** CHANGE IS HERE: Add dispatch and navigate inside the array ***
+}, [dispatch, navigate]);
   const handleGptSearchClick = () => {
     // Toggle GPT Search
     dispatch(toggleGptSearchView());
