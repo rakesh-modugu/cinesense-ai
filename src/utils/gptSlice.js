@@ -6,7 +6,7 @@ const gptSlice = createSlice({
     showGptSearch: false,
     movieNames: null,
     movieResults: null,
-    movieStories: null, // <-- New Storage for Stories
+    movieStories: null,
   },
   reducers: {
     toggleGptSearchView: (state) => {
@@ -16,7 +16,7 @@ const gptSlice = createSlice({
       const { movieNames, movieResults, movieStories } = action.payload;
       state.movieNames = movieNames;
       state.movieResults = movieResults;
-      state.movieStories = movieStories; // <-- Saving Stories
+      state.movieStories = movieStories;
     },
   },
 });

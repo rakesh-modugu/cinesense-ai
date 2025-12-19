@@ -13,6 +13,7 @@ const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
   const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
+
   const handleSignOut = () => {
     signOut(auth)
       .then(() => {})
@@ -22,26 +23,28 @@ const Header = () => {
   };
 
   useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User signed in logic...
-      const { uid, email, displayName, photoURL } = user;
-      dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
-      navigate("/browse");
-    } else {
-      // User signed out logic...
-      dispatch(removeUser());
-      navigate("/");
-    }
-  });
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const { uid, email, displayName, photoURL } = user;
+        dispatch(
+          addUser({
+            uid: uid,
+            email: email,
+            displayName: displayName,
+            photoURL: photoURL,
+          })
+        );
+        navigate("/browse");
+      } else {
+        dispatch(removeUser());
+        navigate("/");
+      }
+    });
 
-  // Unsubscribe when component unmounts
-  return () => unsubscribe();
-  
-  // *** CHANGE IS HERE: Add dispatch and navigate inside the array ***
-}, [dispatch, navigate]);
+    return () => unsubscribe();
+  }, [dispatch, navigate]);
+
   const handleGptSearchClick = () => {
-    // Toggle GPT Search
     dispatch(toggleGptSearchView());
   };
 
@@ -50,13 +53,13 @@ const Header = () => {
   };
 
   return (
-    <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
-      <img className="w-44 mx-auto md:mx-0" src={LOGO} alt="logo" />
+    <div className="absolute w-full px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between items-center">
+      <img className="w-44 mx-auto md:mx-0 cursor-pointer" src={LOGO} alt="logo" />
       {user && (
-        <div className="flex p-2 justify-between">
+        <div className="flex p-2 justify-between items-center gap-4">
           {showGptSearch && (
             <select
-              className="p-2 m-2 bg-gray-900 text-white"
+              className="p-2 bg-gray-900 text-white rounded-lg border border-gray-700 focus:ring-2 focus:ring-red-600 outline-none"
               onChange={handleLanguageChange}
             >
               {SUPPORTED_LANGUAGES.map((lang) => (
@@ -67,19 +70,21 @@ const Header = () => {
             </select>
           )}
           <button
-            className="py-2 px-4 mx-4 my-2 bg-purple-800 text-white rounded-lg"
+            className="py-2 px-4 bg-purple-800 text-white rounded-lg hover:bg-purple-900 transition-all duration-300 font-semibold shadow-lg"
             onClick={handleGptSearchClick}
           >
-            {showGptSearch ? "Homepage" : "GPT Search"}
+            {showGptSearch ? "Home" : "GPT Search"}
           </button>
-          <img
-            className="hidden md:block w-12 h-12"
-            alt="usericon"
-            src={user?.photoURL}
-          />
-          <button onClick={handleSignOut} className="font-bold text-white ">
-            (Sign Out)
-          </button>
+          <div className="flex items-center gap-2 group cursor-pointer" onClick={handleSignOut}>
+             <img
+                className="hidden md:block w-10 h-10 rounded-md border-2 border-transparent group-hover:border-red-600 transition-all"
+                alt="usericon"
+                src={user?.photoURL}
+             />
+             <button className="font-bold text-white group-hover:text-red-500 transition-colors">
+                Sign Out
+             </button>
+          </div>
         </div>
       )}
     </div>

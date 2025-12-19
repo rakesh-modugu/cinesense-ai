@@ -5,6 +5,9 @@ const moviesSlice = createSlice({
   initialState: {
     nowPlayingMovies: null,
     popularMovies: null,
+    topRatedMovies: null, // Trending badulu Top Rated vadadam (Better API)
+    upcomingMovies: null,
+    horrorMovies: null, // Horror movies kosam
     trailerVideo: null,
   },
   reducers: {
@@ -14,13 +17,28 @@ const moviesSlice = createSlice({
     addPopularMovies: (state, action) => {
       state.popularMovies = action.payload;
     },
+    addTopRatedMovies: (state, action) => {
+      state.topRatedMovies = action.payload;
+    },
+    addUpcomingMovies: (state, action) => {
+      state.upcomingMovies = action.payload;
+    },
+    addHorrorMovies: (state, action) => {
+      state.horrorMovies = action.payload;
+    },
     addTrailerVideo: (state, action) => {
       state.trailerVideo = action.payload;
     },
   },
 });
 
-export const { addNowPlayingMovies, addTrailerVideo, addPopularMovies } =
-  moviesSlice.actions;
+export const {
+  addNowPlayingMovies,
+  addPopularMovies,
+  addTopRatedMovies,
+  addUpcomingMovies,
+  addHorrorMovies,
+  addTrailerVideo,
+} = moviesSlice.actions;
 
 export default moviesSlice.reducer;
